@@ -16,14 +16,31 @@ from assignment_preprocessing import optimized_preprocess
 app = Flask(__name__)
 
 # Load trained models
-MODEL_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'models')
+MODEL_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'models')
 
 print("Loading models...")
-with open(os.path.join(MODEL_DIR, 'multinomial_nb_model.pkl'), 'rb') as f:
+print(f"Model directory: {MODEL_DIR}")
+
+# Check if models exist
+if not os.path.exists(MODEL_DIR):
+    print(f"❌ Models directory not found: {MODEL_DIR}")
+    print("Creating models directory...")
+    os.makedirs(MODEL_DIR, exist_ok=True)
+
+mnb_path = os.path.join(MODEL_DIR, 'multinomial_nb_model.pkl')
+bnb_path = os.path.join(MODEL_DIR, 'bernoulli_nb_model.pkl')
+
+if not os.path.exists(mnb_path) or not os.path.exists(bnb_path):
+    print(f"❌ Model files not found!")
+    print(f"Looking for: {mnb_path}")
+    print(f"Looking for: {bnb_path}")
+    raise FileNotFoundError("Model files not found. Please ensure models are in the 'models/' directory.")
+
+with open(mnb_path, 'rb') as f:
     multinomial_model = pickle.load(f)
 print("✓ Multinomial NB loaded")
 
-with open(os.path.join(MODEL_DIR, 'bernoulli_nb_model.pkl'), 'rb') as f:
+with open(bnb_path, 'rb') as f:
     bernoulli_model = pickle.load(f)
 print("✓ Bernoulli NB loaded")
 
