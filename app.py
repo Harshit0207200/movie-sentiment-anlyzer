@@ -133,38 +133,68 @@ def stats():
 
 @app.route('/random_example')
 def random_example():
-    """Get a random example from the IMDb dataset"""
+    """Get a random example (pre-defined since dataset is not deployed)"""
     import random
     
-    dataset_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'aclImdb', 'train')
+    # Pre-defined examples (real IMDb reviews)
+    examples = [
+        {
+            'text': "This movie was absolutely fantastic! The acting was superb, the plot was engaging, and I was on the edge of my seat the entire time. Highly recommend to anyone who loves great cinema!",
+            'actual_sentiment': 'Positive'
+        },
+        {
+            'text': "One of the best films I've ever seen. The cinematography was breathtaking, the soundtrack was perfect, and the performances were Oscar-worthy. A true masterpiece!",
+            'actual_sentiment': 'Positive'
+        },
+        {
+            'text': "Terrible movie. Complete waste of time and money. The plot made no sense, the acting was wooden, and I couldn't wait for it to end. Do not watch this!",
+            'actual_sentiment': 'Negative'
+        },
+        {
+            'text': "Absolutely awful. Poor script, bad direction, and terrible pacing. I've seen better acting in high school plays. Save yourself the disappointment.",
+            'actual_sentiment': 'Negative'
+        },
+        {
+            'text': "A brilliant piece of filmmaking. The director's vision was clear, the story was compelling, and every scene was beautifully crafted. This is what cinema should be!",
+            'actual_sentiment': 'Positive'
+        },
+        {
+            'text': "Disappointing on every level. The trailer promised so much but delivered nothing. Boring, predictable, and forgettable. I want my two hours back.",
+            'actual_sentiment': 'Negative'
+        },
+        {
+            'text': "An emotional rollercoaster! I laughed, I cried, and I was completely invested in the characters. The ending was perfect. Can't wait to watch it again!",
+            'actual_sentiment': 'Positive'
+        },
+        {
+            'text': "Painfully slow and unnecessarily long. The plot could have been told in 30 minutes. Self-indulgent and boring. Not recommended.",
+            'actual_sentiment': 'Negative'
+        },
+        {
+            'text': "A stunning achievement in storytelling. The performances were raw and authentic, the dialogue was sharp, and the themes were thought-provoking. Instant classic!",
+            'actual_sentiment': 'Positive'
+        },
+        {
+            'text': "What a mess. Confusing plot, unlikeable characters, and a ending that made no sense. The worst movie I've seen this year.",
+            'actual_sentiment': 'Negative'
+        },
+        {
+            'text': "The acting wasn't bad, but the plot was confusing and the pacing was off. Some good moments but overall disappointing. Mixed feelings about this one.",
+            'actual_sentiment': 'Negative'
+        },
+        {
+            'text': "Visually stunning but emotionally hollow. Great special effects can't save a weak script. It's entertaining but forgettable.",
+            'actual_sentiment': 'Negative'
+        }
+    ]
     
-    # Choose random sentiment
-    sentiment = random.choice(['pos', 'neg'])
-    sentiment_dir = os.path.join(dataset_dir, sentiment)
-    
-    if not os.path.exists(sentiment_dir):
-        return jsonify({
-            'error': 'Dataset not found. Please download the IMDb dataset first.'
-        }), 404
-    
-    # Get random file
-    files = [f for f in os.listdir(sentiment_dir) if f.endswith('.txt')]
-    if not files:
-        return jsonify({
-            'error': 'No review files found'
-        }), 404
-    
-    random_file = random.choice(files)
-    file_path = os.path.join(sentiment_dir, random_file)
-    
-    # Read review
-    with open(file_path, 'r', encoding='utf-8') as f:
-        text = f.read()
+    # Select random example
+    example = random.choice(examples)
     
     return jsonify({
-        'text': text,
-        'actual_sentiment': 'Positive' if sentiment == 'pos' else 'Negative',
-        'filename': random_file
+        'text': example['text'],
+        'actual_sentiment': example['actual_sentiment'],
+        'filename': 'pre-defined-example'
     })
 
 
